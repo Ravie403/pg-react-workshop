@@ -7,7 +7,7 @@ on:
       - completed
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-20.04
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
@@ -28,7 +28,12 @@ jobs:
             ${{ runner.os }}-node-
       - run: yarn install
       - run: yarn build
-
+  deploy:
+    runs-on: ubuntu-20.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v2
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
